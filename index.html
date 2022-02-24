@@ -5,32 +5,76 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="index.css">
-    <title>Document</title>
+    <title>AHA - 2D Web Based CAD</title>
 </head>
 <body>
-    <canvas id="c"></canvas>
-    <script  id="vertex-shader-2d" type="notjs">
-        attribute vec4 verticesPosition;
-        attribute vec4 verticesColor;
+  <div class="cad">
+    <div class="canvas">
+      <canvas id="c"></canvas>
+    </div>
+    <div class="menu">
+      <div class="logo">
+        <div class="logo-title">AHA</div>
+        <div class="logo-subtitle">2D Web Based CAD</div>
+      </div>
+      <div class="shape">
+        <div class="shape-title">Choose Shape to Draw</div>
+        <div class="shape-option">
+          <label class="container_radio">Line
+            <input type="radio" checked="checked" name="line">
+            <span class="checkmark"></span>
+          </label>
+          <label class="container_radio">Square
+            <input type="radio" name="square">
+            <span class="checkmark"></span>
+          </label>
+          <label class="container_radio">Rectangle
+            <input type="radio" name="rectangle">
+            <span class="checkmark"></span>
+          </label>
+          <label class="container_radio">Polygon
+            <input type="radio" name="polygon">
+            <span class="checkmark"></span>
+          </label>
+        </div>
+      <div class="action">
+        <div class="action-title">Action</div>
+        <div class="action-option">
+          <button class="button">Select</button>
+          <button class="button">Load</button>
+          <button class="button">Save</button>
+        </div>
+      </div>
+      <div class="color">
+        <div class="color-title">Color</div>
+        <div class="color-option">
+          <input type="color" id="color" name="color" value="#ff0000">
+        </div>
+      </div>
 
-        varying vec4 fragmentColor;
-        uniform vec2 u_resolution;
-      
-        void main() {
-            gl_Position = verticesPosition;
-           fragmentColor = verticesColor;
-        }
-      </script>
-      <!-- fragment shader -->
-      <script  id="fragment-shader-2d" type="notjs">
-        precision mediump float;
-        varying vec4 fragmentColor;
-        void main() {
-          gl_FragColor = fragmentColor;
-        }
-      </script>
-
-        <script type="text/javascript" src="utils.js"></script>
-        <script src="index.js"></script>
+    </div>
+  </div>
+  </div>
 </body>
+<script  id="vertex-shader-2d" type="notjs">
+  attribute vec4 verticesPosition;
+  attribute vec4 verticesColor;
+  varying vec4 fragmentColor;
+  uniform vec2 u_resolution;
+
+  void main() {
+    gl_Position = verticesPosition;
+    fragmentColor = verticesColor;
+  }
+</script>
+
+<script  id="fragment-shader-2d" type="notjs">
+  precision mediump float;
+  varying vec4 fragmentColor;
+  void main() {
+    gl_FragColor = fragmentColor;
+  }
+</script>
+<script type="text/javascript" src="utils.js"></script>
+<script src="index.js"></script>
 </html>
