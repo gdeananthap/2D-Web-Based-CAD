@@ -91,6 +91,7 @@ window.onload = function init() {
 
                 gl.bufferSubData(gl.ARRAY_BUFFER, 16*(index_line-2), flatten(t));
                 gl.bufferSubData(gl.ARRAY_BUFFER, 16*(index_line-1), flatten(t));
+                render();
             }
         // } else if (document.getElementById("square").checked) {
             // function square
