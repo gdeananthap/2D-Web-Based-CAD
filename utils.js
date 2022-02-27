@@ -132,3 +132,13 @@ function hexToVec4(value) {
     var b = parseInt(value.slice(5,7), 16);
     return vec4(r/255, g/255, b/255, 1.0);
 }
+
+function verticesMatrixToArray(array) {
+    var result = []
+    for (let i = 0; i < array.length; i++) {
+        result.push(array[i][0])
+        result.push(array[i][1])
+      }
+    console.log(result)
+    return result
+}

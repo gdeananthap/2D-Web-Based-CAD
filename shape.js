@@ -37,6 +37,24 @@ class Shape {
             this.anchorPoint = [sigmaX / (this.va.length/2), sigmaY / (this.va.length/2)]
         }
     }
+    
+    draw(gl, program){
+        var verticesPosition = gl.getAttribLocation( program, "verticesPosition");
+        var verticesColor = gl.getUniformLocation( program, "fragmentColor");
+        let vertexBuffer =  gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+        gl.uniform4fv(verticesColor, this.color);
+        gl.vertexAttribPointer(verticesPosition, 2, gl.FLOAT, false, 0, 0);
+        if(this.type === "line"){
+            gl.bufferData(gl.ARRAY_BUFFER, flatten(verticesMatrixToArray(this.vertices)), gl.STATIC_DRAW);
+            gl.vertexAttribPointer(verticesPosition, 2, gl.FLOAT, false, 0, 0);
+            gl.drawArrays(gl.LINES, 0, 2);
+        } else{
+            gl.bufferData(gl.ARRAY_BUFFER, flatten(verticesMatrixToArray(this.vertices)), gl.STATIC_DRAW);
+            gl.vertexAttribPointer(verticesPosition, 2, gl.FLOAT, false, 0, 0);
+            gl.drawArrays(gl.TRIANGLE_FAN, 0, this.vertices.length);
+        }
+    }
 
     assignId(id) { this.id = id }
     setColor(color) { this.color = color }

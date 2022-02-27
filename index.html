@@ -59,20 +59,28 @@
   </div>
 </body>
 <script  id="vertex-shader-2d" type="notjs">
-  attribute vec4 verticesPosition;
-  attribute vec4 verticesColor;
-  varying vec4 fragmentColor;
-  uniform vec2 u_resolution;
+  attribute vec2 verticesPosition;
+  uniform vec2 verticesResolution;
 
   void main() {
-    gl_Position = verticesPosition;
-    fragmentColor = verticesColor;
+    // convert the position from pixels to 0.0 to 1.0
+    vec2 zeroToOne = verticesPosition.xy / verticesResolution;
+
+    // convert from 0->1 to 0->2
+    vec2 zeroToTwo = zeroToOne * 2.0;
+    
+    // convert from 0->2 to -1->+1 (clipspace)
+    vec2 clipSpace = zeroToTwo - 1.0;
+
+    gl_Position = vec4(verticesPosition, 0, 1);
   }
 </script>
 
 <script  id="fragment-shader-2d" type="notjs">
   precision mediump float;
-  varying vec4 fragmentColor;
+
+  uniform vec4 fragmentColor;
+  
   void main() {
     gl_FragColor = fragmentColor;
   }
