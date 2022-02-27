@@ -60,19 +60,10 @@
 </body>
 <script  id="vertex-shader-2d" type="notjs">
   attribute vec2 verticesPosition;
-  uniform vec2 verticesResolution;
 
   void main() {
-    // convert the position from pixels to 0.0 to 1.0
-    vec2 zeroToOne = verticesPosition.xy / verticesResolution;
-
-    // convert from 0->1 to 0->2
-    vec2 zeroToTwo = zeroToOne * 2.0;
-    
-    // convert from 0->2 to -1->+1 (clipspace)
-    vec2 clipSpace = zeroToTwo - 1.0;
-
     gl_Position = vec4(verticesPosition, 0, 1);
+    gl_PointSize = 10.0;
   }
 </script>
 
@@ -83,6 +74,22 @@
   
   void main() {
     gl_FragColor = fragmentColor;
+  }
+</script>
+<script id="pick-vertex-shader" type="x-shader/x-vertex">
+  attribute vec2 verticesPosition;
+
+  void main() {
+    gl_Position = vec4(verticesPosition, 0, 1);
+  }
+</script>
+<script id="pick-fragment-shader" type="x-shader/x-fragment">
+  precision mediump float;
+ 
+  uniform vec4 u_id;
+ 
+  void main() {
+     gl_FragColor = u_id;
   }
 </script>
 <script type="text/javascript" src="utils.js"></script>

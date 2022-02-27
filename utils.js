@@ -139,6 +139,5 @@ function verticesMatrixToArray(array) {
         result.push(array[i][0])
         result.push(array[i][1])
       }
-    console.log(result)
     return result
 }

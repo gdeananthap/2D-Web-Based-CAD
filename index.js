@@ -3,11 +3,6 @@ var gl;
 var state = "draw";
 var currentShape = "line";
 
-var maxNumLines = 200;  
-var maxNumVertices  = 4 * maxNumLines;
-var index_line = 0;
-var index_sq = 0;
-var index_polygon = 0;
 var first = true;
 
 var t, t1, t2, t3, t4;
@@ -18,6 +13,8 @@ var cIndex = 0;
 
 var countShape = 0;
 var shapeToDraw = [];
+var selectedShapeId = 0;
+var hoveredShapeId = 0;
 var vertices = []
 var vertexLeft = 2;
 var colors; 
@@ -41,27 +38,52 @@ function main() {
 
     gl.viewport( 0, 0, canvas.width, canvas.height );
     gl.clearColor( 1, 1, 1, 1 );
-    gl.clear( gl.COLOR_BUFFER_BIT );
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     var program = initShaders( gl, "vertex-shader-2d", "fragment-shader-2d" );
+    var selectProgram = initShaders( gl, "pick-vertex-shader", "pick-fragment-shader" );
     gl.useProgram( program );
     
     var verticesPosition = gl.getAttribLocation( program, "verticesPosition");
     var verticesColor = gl.getUniformLocation( program, "fragmentColor");
     gl.vertexAttribPointer(verticesPosition, 2, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(verticesPosition);
-    
-    // gl.vertexAttribPointer(verticesColor, 4, gl.FLOAT, false, 0, 0);
-    // gl.enableVertexAttribArray(verticesColor);
 
-    // var verticesBuffer = gl.createBuffer();
-    // gl.bindBuffer(gl.ARRAY_BUFFER, verticesBuffer);
-    // gl.bufferData(gl.ARRAY_BUFFER, 8*maxNumVertices, gl.STATIC_DRAW);
-    // var colorBuffer = gl.createBuffer();
-    // gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-    // gl.bufferData(gl.ARRAY_BUFFER, 16*maxNumVertices, gl.STATIC_DRAW );
+    const targetTexture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, targetTexture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     
 
+    const depthBuffer = gl.createRenderbuffer();
+    gl.bindRenderbuffer(gl.RENDERBUFFER, depthBuffer);
+    
+    function setFramebufferAttachmentSizes(width, height) {
+    gl.bindTexture(gl.TEXTURE_2D, targetTexture);
+
+    const level = 0;
+    const internalFormat = gl.RGBA;
+    const border = 0;
+    const format = gl.RGBA;
+    const type = gl.UNSIGNED_BYTE;
+    const data = null;
+    gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
+                    width, height, border,
+                    format, type, data);
+    
+    gl.bindRenderbuffer(gl.RENDERBUFFER, depthBuffer);
+    gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, width, height);
+    }
+    
+    const fb = gl.createFramebuffer();
+    gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+    
+    const attachmentPoint = gl.COLOR_ATTACHMENT0;
+    const level = 0;
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, targetTexture, level);
+    
+    gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, depthBuffer);
 
     canvas.addEventListener("mousedown", function(event){
         if (state === "draw") {
@@ -141,12 +163,25 @@ function main() {
                 vertices.push(t)
             }
         } else if(state == "select"){
-            //
+            if(selectedShapeId > 0){
+                shapeToDraw.forEach(function (shape) {
+                    if(shape.id === selectedShapeId){
+                        shape.deselect();
+                        selectedShapeId = 0;
+                    }
+                });
+            }else{
+                selectedShapeId = hoveredShapeId;
+                shapeToDraw.forEach(function (shape) {
+                    if(shape.id === selectedShapeId){
+                        shape.select();
+                    }
+                });
+            }
         }
     })
     
     canvas.addEventListener("mousemove", function(e){
-        console.log("test")
         const rect = canvas.getBoundingClientRect();
         mouseX = (2*(e.clientX - rect.left)/canvas.width-1);
         mouseY = -1*(2*(e.clientY)/canvas.height-1);
@@ -193,8 +228,34 @@ function main() {
     })
     
     function render() {
+        gl.useProgram(selectProgram);
+        setFramebufferAttachmentSizes(gl.canvas.width, gl.canvas.height);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+        gl.viewport( 0, 0, canvas.width, canvas.height );
+        gl.enable(gl.DEPTH_TEST);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        shapeToDraw.forEach(function (shape) {
+            shape.drawID(gl, selectProgram);
+        });
+        const data = new Uint8Array(4);
+        const rect = canvas.getBoundingClientRect();
+        // mouseX = (2*(e.clientX - rect.left)/canvas.width-1);
+        // mouseY = -1*(2*(e.clientY)/canvas.height-1);
+        const pixelX = (mouseX+1) * canvas.width / 2;
+        const pixelY = ((mouseY*-1)+1)*canvas.height/2;
+        gl.readPixels(
+            pixelX,
+            pixelY,
+            1,
+            1,
+            gl.RGBA,
+            gl.UNSIGNED_BYTE,
+            data
+        );
+        hoveredShapeId = data[0] + (data[1] << 8) + (data[2] << 16) + (data[3] << 24);
         gl.useProgram( program );
-        gl.clear( gl.COLOR_BUFFER_BIT );
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         gl.viewport( 0, 0, canvas.width, canvas.height );
         gl.uniform4fv(verticesColor, hexToVec4(document.getElementById("color").value))
         if(state === "draw"){
@@ -239,6 +300,9 @@ function main() {
         window.requestAnimFrame(render);
         shapeToDraw.forEach(function (shape) {
             shape.draw(gl,program);
+            if(shape.isSelected){
+                shape.drawControlPoints(gl, program);
+            }
         });
     }
     window.requestAnimFrame(render);
