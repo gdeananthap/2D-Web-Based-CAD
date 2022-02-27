@@ -125,3 +125,10 @@ function vec4()
 
     return result.splice( 0, 4 );
 }
+
+function hexToVec4(value) {
+    var r = parseInt(value.slice(1,3), 16);
+    var g = parseInt(value.slice(3,5), 16);
+    var b = parseInt(value.slice(5,7), 16);
+    return vec4(r/255, g/255, b/255, 1.0);
+}
