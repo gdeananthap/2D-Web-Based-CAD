@@ -28,8 +28,16 @@ let frameCount = 0;
 
 function main() {
     canvas = document.getElementById( "c" );
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
+    displayWidth = canvas.clientWidth;
+    console.log(displayWidth)
+    displayHeight = canvas.clientHeight;
+    console.log(displayHeight)
+    const needResize = canvas.width  !== displayWidth ||
+                     canvas.height !== displayHeight;
+    if (needResize) {
+        canvas.width  = displayWidth;
+        canvas.height = displayHeight;
+    }
 
     var gl = canvas.getContext("webgl");
     if (!gl) {
@@ -37,7 +45,7 @@ function main() {
         return;
     }
 
-    gl.viewport( 0, 0, canvas.width, canvas.height );
+    gl.viewport( 0, 0, gl.canvas.width, gl.canvas.height );
     gl.clearColor( 1, 1, 1, 1 );
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
