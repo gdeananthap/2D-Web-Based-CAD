@@ -109,6 +109,13 @@ class Shape {
         }
     }
 
+    movePoint(idx, x, y){
+        if(this.type==="line" || this.type==="polygon"){
+            this.vertices[idx][0] = x;
+            this.vertices[idx][1] = y;
+        }
+    }
+
     assignId(id) { this.id = id }
     setColor(color) { this.color = color }
     select() {

@@ -2,9 +2,10 @@ var canvas;
 var gl;
 var state = "draw";
 var currentShape = "line";
+var isMovingControlPoint = false;
+var controlPointId = -1;
 
 var first = true;
-
 var t, t1, t2, t3, t4;
 var countPolygon = 0;
 var countIndices = [0];
@@ -163,20 +164,30 @@ function main() {
                 vertices.push(t)
             }
         } else if(state == "select"){
-            if(selectedShapeId > 0){
+            if(hoveredShapeId<=0){
                 shapeToDraw.forEach(function (shape) {
                     if(shape.id === selectedShapeId){
                         shape.deselect();
                         selectedShapeId = 0;
                     }
                 });
-            }else{
-                selectedShapeId = hoveredShapeId;
+            }else if(!(selectedShapeId === hoveredShapeId)){
                 shapeToDraw.forEach(function (shape) {
                     if(shape.id === selectedShapeId){
+                        shape.deselect();
+                    }
+                    if(shape.id === hoveredShapeId){
                         shape.select();
-                        console.log(shape);
-                        
+                    }
+                });
+                selectedShapeId = hoveredShapeId;
+            }else if(selectedShapeId>0){
+                shapeToDraw.forEach(function (shape) {
+                    if(shape.id === selectedShapeId){
+                        controlPointId = shape.getCurrentControlPoint(mouseX, mouseY);
+                        if(controlPointId > -1){
+                            isMovingControlPoint = true;
+                        }
                     }
                 });
             }
@@ -187,6 +198,19 @@ function main() {
         const rect = canvas.getBoundingClientRect();
         mouseX = (2*(e.clientX - rect.left)/canvas.width-1);
         mouseY = -1*(2*(e.clientY)/canvas.height-1);
+        if(isMovingControlPoint){
+            if(selectedShapeId>0 && isMovingControlPoint){
+                shapeToDraw.forEach(function (shape) {
+                    if(shape.id === selectedShapeId){
+                        shape.movePoint(controlPointId, mouseX, mouseY)
+                    }
+                });
+            }
+        }
+    })
+
+    canvas.addEventListener("mouseup", function(e){
+        isMovingControlPoint = false;
     })
 
     document.getElementById("PolygonEndButton")
