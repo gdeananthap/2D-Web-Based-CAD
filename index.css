@@ -12,8 +12,8 @@ body {
 .canvas {
   width: 60vw;
   height: 100vh;
-  /* width: 800px;
-  height: 800px; */
+  /* width: 1000px;
+  height: 100vh; */
 }
 .menu{
   background-color: #323232;
@@ -26,8 +26,8 @@ body {
 canvas {
   width: 60vw;
   height: 100vh;
-  /* width: 800px;
-  height: 800px; */
+  /* width: 1000px;
+  height: 100vh; */
 }
 .logo{
   color: white;

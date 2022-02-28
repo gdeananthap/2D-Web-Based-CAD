@@ -179,12 +179,14 @@ function main() {
                     if(shape.id === hoveredShapeId){
                         shape.select();
                     }
+                    console.log(shape);
                 });
                 selectedShapeId = hoveredShapeId;
             }else if(selectedShapeId>0){
                 shapeToDraw.forEach(function (shape) {
                     if(shape.id === selectedShapeId){
                         controlPointId = shape.getCurrentControlPoint(mouseX, mouseY);
+                        console.log(controlPointId);
                         if(controlPointId > -1){
                             isMovingControlPoint = true;
                         }

@@ -114,6 +114,50 @@ class Shape {
             this.vertices[idx][0] = x;
             this.vertices[idx][1] = y;
         }
+        else if (this.type==="rectangle") {
+            this.vertices[idx][0] = x;
+            this.vertices[idx][1] = y;
+            if(idx === 0) {
+                this.vertices[1][0] = x;
+                this.vertices[3][1] = y;
+            }
+            else if(idx === 1) {
+                this.vertices[0][0]= x;
+                this.vertices[2][1] = y;
+            }
+            else if(idx ===3) {
+                this.vertices[0][1] = y;
+                this.vertices[2][0] = x;
+            }
+            else if(idx == 2) {
+                this.vertices[1][1] = y;
+                this.vertices[3][0] = x;
+            }
+        }
+        else if (this.type==="square") {
+            //this.vertices[idx][0] = x;
+            this.vertices[idx][1] = y;
+            if(idx === 0) {
+                this.vertices[idx][0] = this.vertices[2][0] > x ? this.vertices[2][0] - Math.abs(this.vertices[2][1]-y) : this.vertices[2][0] + Math.abs(this.vertices[2][1]-y);
+                this.vertices[1][0] = this.vertices[idx][0];
+                this.vertices[3][1] = y;
+            }
+            else if(idx === 1) {
+                this.vertices[idx][0] = this.vertices[3][0] > x ? this.vertices[3][0] - Math.abs(this.vertices[3][1]-y) : this.vertices[3][0] + Math.abs(this.vertices[3][1]-y);
+                this.vertices[0][0]= this.vertices[idx][0];
+                this.vertices[2][1] = y;
+            }
+            else if(idx ===3) {
+                this.vertices[idx][0] = this.vertices[1][0] > x ? this.vertices[1][0] - Math.abs(this.vertices[1][1]-y) : this.vertices[1][0] + Math.abs(this.vertices[1][1]-y);
+                this.vertices[0][1] = y;
+                this.vertices[2][0] = this.vertices[idx][0];
+            }
+            else if(idx == 2) {
+                this.vertices[idx][0] = this.vertices[0][0] > x ? this.vertices[0][0] - Math.abs(this.vertices[0][1]-y) : this.vertices[0][0] + Math.abs(this.vertices[0][1]-y);
+                this.vertices[1][1] = y;
+                this.vertices[3][0] = this.vertices[idx][0];
+            }
+        }
     }
 
     assignId(id) { this.id = id }
