@@ -120,7 +120,7 @@ function main() {
                     var xf, xx, yy;
                     yy = 2*(canvas.height-event.clientY)/canvas.height-1;
                     xf = 2*event.clientX/canvas.width-1;
-                    xx = x > xf ? t1[0] - Math.abs(t1[1]-yy) : t1[0] + Math.abs(t1[1]-yy);
+                    xx = t1[0] > xf ? t1[0] - Math.abs(t1[1]-yy) : t1[0] + Math.abs(t1[1]-yy);
                     t2 = vec2(xx,yy);
                     t3 = vec2(t1[0], t2[1]);
                     t4 = vec2(t2[0], t1[1]);
@@ -175,6 +175,8 @@ function main() {
                 shapeToDraw.forEach(function (shape) {
                     if(shape.id === selectedShapeId){
                         shape.select();
+                        console.log(shape);
+                        
                     }
                 });
             }
@@ -242,7 +244,7 @@ function main() {
         // mouseX = (2*(e.clientX - rect.left)/canvas.width-1);
         // mouseY = -1*(2*(e.clientY)/canvas.height-1);
         const pixelX = (mouseX+1) * canvas.width / 2;
-        const pixelY = ((mouseY*-1)+1)*canvas.height/2;
+        const pixelY = (mouseY+1)*canvas.height/2;
         gl.readPixels(
             pixelX,
             pixelY,

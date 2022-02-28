@@ -62,7 +62,9 @@
   attribute vec2 verticesPosition;
 
   void main() {
-    gl_Position = vec4(verticesPosition, 0, 1);
+
+    //gl_Position = vec4(verticesPosition * vec2(1, -1), 0, 1);
+    gl_Position = vec4(verticesPosition,0,1);
     gl_PointSize = 10.0;
   }
 </script>
