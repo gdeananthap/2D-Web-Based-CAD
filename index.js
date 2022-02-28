@@ -27,6 +27,16 @@ let oldPickColor;
 let frameCount = 0;
 
 function main() {
+    $("#open").click(function(){
+        $("#a").css("display","block");
+        $("#b").css("display","block");
+                    });
+    
+    $(".cancel").click(function(){
+        $("#a").fadeOut();
+        $("#b").fadeOut();
+    });
+
     canvas = document.getElementById( "c" );
     canvas.width = canvas.clientWidth;
     canvas.height = canvas.clientHeight;
@@ -105,7 +115,7 @@ function main() {
                     countShape++;
                     var obj = new Shape(countShape, "line", vertices, t)
                     vertices = []
-                    shapeToDraw.push(obj);
+                    shapeToDraw = [obj, ...shapeToDraw];
                 }
             }else if (document.getElementById("square").checked) {
                 if(first) {
@@ -134,7 +144,7 @@ function main() {
                     countShape++;
                     var obj = new Shape(countShape, "square", vertices, t)
                     vertices = []
-                    shapeToDraw.push(obj);
+                    shapeToDraw = [obj, ...shapeToDraw];
                 }
             } else if (document.getElementById("rectangle").checked) {
                 if(first) {
@@ -157,7 +167,7 @@ function main() {
                     countShape++;
                     var obj = new Shape(countShape, "rectangle", vertices, t)
                     vertices = []
-                    shapeToDraw.push(obj);
+                    shapeToDraw = [obj, ...shapeToDraw];
                 }
             } else if (document.getElementById("polygon").checked) {
                 t  = vec2(2*event.clientX/canvas.width-1, 2*(canvas.height-event.clientY)/canvas.height-1);
@@ -224,7 +234,7 @@ function main() {
                         countShape++;
                         var obj = new Shape(countShape, "polygon", vertices, t)
                         vertices = []
-                        shapeToDraw.push(obj);
+                        shapeToDraw = [obj, ...shapeToDraw];
                     }
                 }
     })

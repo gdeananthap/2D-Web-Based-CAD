@@ -43,6 +43,7 @@
           <button class="button" id="select">Select</button>
           <button class="button" id="load">Load</button>
           <button class="button" id="save">Save</button>
+          <button class="button" id="PolygonEndButton">End Polygon</button>
         </div>
       </div>
       <div class="color">
@@ -52,10 +53,37 @@
         </div>
       </div>
       <div>
-        <div class="button" id="PolygonEndButton">End Polygon</div>
+        <button id="open" class="help_button" >Help</button>
       </div>
     </div>
   </div>
+  </div>
+  <div class="container" id="a">
+  </div>
+  <div class="modal" id="b">
+    <div class="header">
+      <a href="#" class="cancel">X</a>
+    </div>
+    <div class="content">
+      <form>
+        <label id="first_label">Username</label>
+        <input type="text" placeholder="Introduce tu username"/>
+        <label id="second_label">Password</label>
+        <input type="password" placeholder="Introduce tu password"/>
+        <label id="first_label">Username</label>
+        <input type="text" placeholder="Introduce tu username"/>
+        <label id="second_label">Password</label>
+        <input type="password" placeholder="Introduce tu password"/>
+        <label id="first_label">Username</label>
+        <input type="text" placeholder="Introduce tu username"/>
+        <label id="second_label">Password</label>
+        <input type="password" placeholder="Introduce tu password"/>
+      </form>
+    </div>
+    <div class="footer">
+      <button id="login">Iniciar Sesión</button>
+      <button class="cancel">Cancelar</button>
+    </div>
   </div>
 </body>
 <script  id="vertex-shader-2d" type="notjs">
@@ -94,6 +122,7 @@
      gl_FragColor = u_id;
   }
 </script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="utils.js"></script>
 <script src="shape.js"></script>
 <script src="index.js"></script>
