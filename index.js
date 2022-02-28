@@ -284,6 +284,16 @@ function main() {
         state = "draw";
         currentShape = "polygon"
     })
+
+    document.getElementById("color").addEventListener('input', () => {
+        if (selectedShapeId > 0) {
+            shapeToDraw.forEach(function (shape) {
+                if(shape.id === selectedShapeId){
+                    shape.setColor(hexToVec4(document.getElementById("color").value));
+                }
+            });
+        }
+    })
     
     function render() {
         gl.useProgram(selectProgram);
