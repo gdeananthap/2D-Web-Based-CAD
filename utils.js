@@ -178,20 +178,20 @@ function loadFile(file) {
         var color = shape[3].split(",");
         var objShape;
         if (shape[1] == "line") {
-            objShape = new Shape(shape[0], "line", [vec2(vert[0],vert[1]),vec2(vert[2],vert[3])],
+            objShape = new Shape(parseInt(shape[0]), "line", [vec2(vert[0],vert[1]),vec2(vert[2],vert[3])],
                                 vec4(color[0],color[1],color[2],color[3]));
         } else if (shape[1] == "square") {
-            objShape = new Shape(shape[0], "square", [vec2(vert[0],vert[1]),vec2(vert[2],vert[3]),vec2(vert[4],vert[5]),vec2(vert[6],vert[7])],
+            objShape = new Shape(parseInt(shape[0]), "square", [vec2(vert[0],vert[1]),vec2(vert[2],vert[3]),vec2(vert[4],vert[5]),vec2(vert[6],vert[7])],
                                 vec4(color[0],color[1],color[2],color[3]));
         } else if (shape[1] == "rectangle") {
-            objShape = new Shape(shape[0], "rectangle", [vec2(vert[0],vert[1]),vec2(vert[2],vert[3]),vec2(vert[4],vert[5]),vec2(vert[6],vert[7])],
+            objShape = new Shape(parseInt(shape[0]), "rectangle", [vec2(vert[0],vert[1]),vec2(vert[2],vert[3]),vec2(vert[4],vert[5]),vec2(vert[6],vert[7])],
                                 vec4(color[0],color[1],color[2],color[3]));
         } else if (shape[1] ==  "polygon") {
             var arrVert = []
             for (let i = 0; i < vert.length; i+=2) {
                 arrVert.push(vec2(vert[i],vert[i+1]));
             }
-            objShape = new Shape(shape[0], "polygon", arrVert,
+            objShape = new Shape(parseInt(shape[0]), "polygon", arrVert,
                                 vec4(color[0],color[1],color[2],color[3]));
         }
         listShape.push(objShape);
