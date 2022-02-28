@@ -170,12 +170,11 @@ function exportShape(listShape) {
 function loadFile(file) {
     var listShape = [];
     var text = file.split("\n");
+    console.log(text);
     text.pop();
     text.forEach(element => {
         var shape = element.split(";");
-        console.log(shape);
         var vert = shape[2].split(",");
-        
         var color = shape[3].split(",");
         var objShape;
         if (shape[1] == "line") {
@@ -189,10 +188,10 @@ function loadFile(file) {
                                 vec4(color[0],color[1],color[2],color[3]));
         } else if (shape[1] ==  "polygon") {
             var arrVert = []
-            for (let i = 0; i < color.length; i+=2) {
+            for (let i = 0; i < vert.length; i+=2) {
                 arrVert.push(vec2(vert[i],vert[i+1]));
             }
-            objShape = new Shape(shape[0], "rectangle", arrVert,
+            objShape = new Shape(shape[0], "polygon", arrVert,
                                 vec4(color[0],color[1],color[2],color[3]));
         }
         listShape.push(objShape);
