@@ -41,8 +41,11 @@
         <div class="action-title">Action</div>
         <div class="action-option">
           <button class="button" id="select">Select</button>
-          <button class="button" id="load">Load</button>
-          <button class="button" id="save">Save</button>
+          <label class="button">
+            <input name="load" id="load" type="file" value="title.txt" accept=".txt">
+            Load
+          </label>
+          <button class="button" id="save" onclick="save()">Save</button>
           <button class="button" id="PolygonEndButton">End Polygon</button>
         </div>
       </div>

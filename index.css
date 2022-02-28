@@ -284,3 +284,7 @@ input[type="color"] {
     opacity: 0.9;
   }
 }
+
+input[type="file"] {
+  display: none;
+}

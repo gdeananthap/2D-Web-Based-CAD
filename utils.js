@@ -141,3 +141,61 @@ function verticesMatrixToArray(array) {
       }
     return result
 }
+
+function save() {
+    exportShape(shapeToDraw)
+}
+
+function printSave(listShape) {
+    var string = "";
+    listShape.forEach(element => {
+        string += element.id+";"+element.type+";"+element.vertices+";"+element.color+";"+element.isSelected+"\n";
+    });
+    return string;
+}
+
+function exportShape(listShape) {
+    var pom = document.createElement('a');
+    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(printSave(listShape)));
+    pom.setAttribute('download', "Untitled.txt");
+
+    pom.style.display = 'none';
+    document.body.appendChild(pom);
+
+    pom.click();
+
+    document.body.removeChild(pom);
+}
+
+function loadFile(file) {
+    var listShape = [];
+    var text = file.split("\n");
+    text.pop();
+    text.forEach(element => {
+        var shape = element.split(";");
+        console.log(shape);
+        var vert = shape[2].split(",");
+        
+        var color = shape[3].split(",");
+        var objShape;
+        if (shape[1] == "line") {
+            objShape = new Shape(shape[0], "line", [vec2(vert[0],vert[1]),vec2(vert[2],vert[3])],
+                                vec4(color[0],color[1],color[2],color[3]));
+        } else if (shape[1] == "square") {
+            objShape = new Shape(shape[0], "square", [vec2(vert[0],vert[1]),vec2(vert[2],vert[3]),vec2(vert[4],vert[5]),vec2(vert[6],vert[7])],
+                                vec4(color[0],color[1],color[2],color[3]));
+        } else if (shape[1] == "rectangle") {
+            objShape = new Shape(shape[0], "rectangle", [vec2(vert[0],vert[1]),vec2(vert[2],vert[3]),vec2(vert[4],vert[5]),vec2(vert[6],vert[7])],
+                                vec4(color[0],color[1],color[2],color[3]));
+        } else if (shape[1] ==  "polygon") {
+            var arrVert = []
+            for (let i = 0; i < color.length; i+=2) {
+                arrVert.push(vec2(vert[i],vert[i+1]));
+            }
+            objShape = new Shape(shape[0], "rectangle", arrVert,
+                                vec4(color[0],color[1],color[2],color[3]));
+        }
+        listShape.push(objShape);
+    });
+    return listShape;
+}

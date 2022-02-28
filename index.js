@@ -229,6 +229,18 @@ function main() {
         }
     })
 
+    document.getElementById("load")
+            .addEventListener("change", function() {
+                var reader = new FileReader();
+                reader.addEventListener("load", function(e) {
+                    shapeToDraw = loadFile(e.target.result);
+                    countShape = shapeToDraw.length;
+                })
+                reader.readAsText(this.files[0]);
+                render();
+            })
+
+
     canvas.addEventListener("mouseup", function(e){
         isMovingControlPoint = false;
     })
